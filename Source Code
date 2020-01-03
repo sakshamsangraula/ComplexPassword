@@ -3,9 +3,8 @@ package complexPassword;
 public class COMPLEXPASSWORD {
 
 	public static void main(String[] args) {
-		
-		
-		 System.out.println(isComplex("SXV1342", "aAdkg12@@bf"));   // true
+	
+	     System.out.println(isComplex("SXV1342", "aAdkg12@@bf"));   // true
 	     System.out.println(isComplex("Scarfonno", "abos5@Mneyo0"));     // true
 	     System.out.println(isComplex("Scarfonno", "Atzaghk#1a"));     // false
 	
@@ -174,7 +173,9 @@ public class COMPLEXPASSWORD {
 		return false;
 	}
 	
-	// Helper method to reverse a string
+
+	// Helper method to reverse a string which is used by other methods to check if the requirements are met
+	// when the characters are reversed
 	public static String reverseStr (String str)
 	{
 		// create and return a new string that has the characters in reverse order of the original string
