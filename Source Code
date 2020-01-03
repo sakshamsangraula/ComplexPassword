@@ -1,0 +1,196 @@
+package complexPassword;
+
+public class COMPLEXPASSWORD {
+
+	public static void main(String[] args) {
+		
+		
+		 System.out.println(isComplex("SXV1342", "aAdkg12@@bf"));   // true
+	     System.out.println(isComplex("Scarfonno", "abos5@Mneyo0"));     // true
+	     System.out.println(isComplex("Scarfonno", "Atzaghk#1a"));     // false
+	
+	}
+	
+	// Note: .toLowerCase() function is used to make sure that the requirements must be met and
+	// using uppercase characters will not allow the user to claim that the password is complex
+	
+	// This method checks if the password meets all the necessary complexities and requirements 
+	// and returns true if it does and false if it does not
+	public static boolean isComplex(String username, String password)
+	{
+		
+		String upperCaseChars = "ABCDEFGHIJKLMNOPQRSTUVWXYZ";
+		String lowerCaseChars = "abcdefghijklmnopqrstuvwxyz";
+		String base10 = "0123456789";
+		String nonAlphaChars = "~!@#$%^&*_-+=`|(){}[]:;<>,.?/";
+		
+		// if password is less than 10 characters return false
+		if(password.length() < 4) {
+			return false;
+		}
+		
+		// if it does not contain a uppercase, lowercase, numeric, or non-alpha character then return false
+		if(!containsReqChars(password,upperCaseChars) || !containsReqChars(password,lowerCaseChars) || !containsReqChars(password,base10) || !containsReqChars(password,nonAlphaChars))
+		{
+			return false;
+		}
+		
+		// if the password has 3 or more of the same repeating characteres return false
+		if(sameRepeating(password))
+		{
+			return false;
+		}
+		
+		// if the password has three consecutive ascending or descending characters(alphabets or digits)
+		// then return false
+		if(consecutiveCharacters(password, lowerCaseChars) || consecutiveCharacters(password, base10))
+		{
+			return false;
+		}
+		
+		
+		// if the password has three consecutive characters from the username in ascending or descending 
+		// order then return false
+		if(threeConsecutiveUsernameChars(username, password))
+		{
+			return false;
+		}
+		
+		
+		// if all the complexities are met then return true
+		return true;
+		
+		
+		
+	}
+	
+	// This method checks if the password has at least one lowercase, uppercase, base10 digit, and 
+	// non-alpha numeric characters and returns true if it does and false if it does not
+	
+	public static boolean containsReqChars(String password, String str) {
+		// Loop through each character in the password and check if str contains at least one character
+		// if it does return true else return false
+		for(int i=0; i<password.length(); i++)
+		{
+			if(str.toLowerCase().contains(password.substring(i,i+1).toLowerCase()))
+			{
+				return true;
+			}
+		}
+		return false;
+			
+	}
+	
+	// This method returns true if the same character in the password is present 3 or more times
+	// and false if the count of the same repeated character is less than 3
+	
+	public static boolean sameRepeating (String password)
+	{
+		
+		// count the number of same characters and if the count of the same characters is more than or 
+		// equal to 3 then return true and if not then return false
+		for(int i=0; i<password.length(); i++)
+		{
+			// set the count to zero here because it is comparing one character with all the rest of the characters
+			// in the string so if the count is not set to zero here then count will add up as a character
+			// will always equal itself when compared. 
+			
+			int count = 0;
+
+			// this takes a single character from the password and compare it to all the characters following 
+			// that character and increase the count after finding a match
+			
+			for(int j=i; j<password.length(); j++)
+			{
+				if(password.substring(i,i+1).toLowerCase().equals(password.substring(j,j+1).toLowerCase()))
+				{
+					count++;
+				}
+			}
+			
+			// if count is greater than 3 return true
+			if(count >= 3)
+			{
+				return true;
+			}
+		}
+		
+	
+	
+			return false;
+		
+	}
+	
+	// This method returns true if the string of alphabets or digits contain three consecutive characters
+	// in the password in ascending or descending order
+	public static boolean consecutiveCharacters (String password, String str)
+	{
+		for(int i=0; i<password.length()-2; i++)
+		{
+			// if the str (lowercase characters and digits here) passed in as arguments
+			// contain three consecutive password characters in ascending order then return true
+			if(str.toLowerCase().contains(password.substring(i,i+3).toLowerCase()))
+			{
+				return true;
+			}
+			
+			// if the str (lowercase characters and digits here) passed in as arguments
+			// contain three consecutive characters in descending(reverse) order then return true
+			
+			// IMPORTANT NOTE: the helper method, reverseStr which reverses the string is not used both 
+			// in the string passed in and the password because that will lead to the wrong result
+			// for example- if our password is STUDENTcba#56@ and if both lowercase characters and password is
+			// reversed using reverseStr then lowercase characters will be something like .....cba and the 
+			// password will be @65#abcSTUDENT and we falsely conclude that the string of lowercase characters
+			// does not contain the the three consecutive characters (cba) in the password as now it is abc
+		
+			if((str.toLowerCase()).contains(reverseStr(password.substring(i,i+3).toLowerCase())))
+			{
+				return true;
+			}
+		}
+		
+		return false;
+	}
+	
+	// This method returns true if the password contains the same three consecutive characters 
+	// as the username in both ascending or descending order
+	public static boolean threeConsecutiveUsernameChars (String username, String password)
+	{
+		
+		// select three consecutive characters in the password and check if it is present in 
+		// the username in ascending or descending order and return true if it is and false if it is not
+		for(int i = 0; i < password.length()-2; i++)
+		{
+			if(username.toLowerCase().contains(password.substring(i,i+3).toLowerCase()))
+			{
+				return true;
+			}
+			if(username.toLowerCase().contains(reverseStr(password.substring(i,i+3).toLowerCase())))
+			{
+				return true;
+			}
+		}
+		return false;
+	}
+	
+	// Helper method to reverse a string
+	public static String reverseStr (String str)
+	{
+		// create and return a new string that has the characters in reverse order of the original string
+		String reversedStr = "";
+		
+		for(int i=str.length()-1; i>=0; i--)
+		{
+			reversedStr+= str.substring(i,i+1);
+		}
+		return reversedStr;
+	}
+			
+		
+		
+		
+	}
+	
+
+
